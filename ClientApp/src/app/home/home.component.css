@@ -1,0 +1,72 @@
+.fill-background{
+    position: fixed;
+    overflow: auto;
+    left: 0;
+}
+.sky-gradient { background: linear-gradient(to bottom, #94c5f8 1%,#a6e6ff 70%,#b1b5ea 100%); }
+.box-shadow{
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,0.35)!important;
+}
+.clouds{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+.clouds img{
+    position: absolute;
+}
+.cloud1{
+    top: 5%;
+}
+.cloud2{
+    top: 60%
+}
+.cloud3{
+    top: 40%
+}
+
+.cloud-animation1 {
+    position: relative;
+    animation: cloud1 10s infinite;
+}
+.cloud-animation2 {
+    position: relative;
+    animation: cloud2 10s infinite;
+}
+.cloud-animation3 {
+    position: relative;
+    animation: cloud3 6s infinite;
+}
+  
+@keyframes cloud1 {
+    0%,
+    100% {
+        left: 5%;
+    }
+
+    50% {
+        left: 15%;
+    }
+}
+@keyframes cloud2 {
+    0%,
+    100% {
+        right: 40%;
+    }
+
+    50% {
+        right: 70%;
+    }
+}
+@keyframes cloud3 {
+    0%,
+    100% {
+        right: 0;
+    }
+
+    50% {
+        right: 10%;
+    }
+}
+

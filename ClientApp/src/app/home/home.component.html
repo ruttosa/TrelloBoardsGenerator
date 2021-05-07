@@ -1,0 +1,39 @@
+<div class="d-flex h-100 w-100 fill-background sky-gradient">
+  <div class="col-md-12 my-5">
+    <div class="text-center mb-4">
+      <h1 class="text-uppercase">Trello Discography</h1>
+    </div>
+    <div class="col-md-4 m-auto p-3 bg-primary rounded box-shadow">
+      <div class="lead text-light text-center">
+        <p>Complete el formulario para crear el tablero en Trello</p>
+        <hr class="hr-filter">
+      </div>
+      <div class="p-3">
+        <div class="form-group">
+          <label for="dashboardTitle">Nombre del artista:</label>
+          <input type="text" name="" id="dashboardTitle" class="form-control" [(ngModel)]="dashboardTitle" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">** Este campo también definirá el nombre del tablero</small>
+        </div>
+        <div class="form-group">
+          <label for="">Importar discografía</label>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile" (change)="loadFile($event.target.files)" lang="es">
+            <label class="custom-file-label" for="customFile" data-browse="Seleccionar">Seleccionar archivo</label>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="button" class="btn btn-light w-50 shadow" (click)="sendFile()">Crear Tablero</button>
+      </div>
+    </div>
+  </div>
+  <div class="clouds">
+    <img class="cloud1 cloud-animation1" src="assets/images/clouds_1-02.png" alt="">
+    <img class="cloud2 cloud-animation2" src="assets/images/clouds_1-02.png" alt="">
+    <img class="cloud3 cloud-animation3" src="assets/images/clouds_1-02.png" alt="">
+  </div>  
+</div>
+
+<ngx-loading [show]="showBusy"
+    [config]="{animationType: ngxLoadingAnimationTypes.circleSwish, primaryColour: primaryColour, backdropBorderRadius: '3px'}">
+</ngx-loading>
