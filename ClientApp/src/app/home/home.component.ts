@@ -1,6 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient, HttpHeaderResponse, HttpHeaders } from '@angular/common/http';
 import { ngxLoadingAnimationTypes, NgxLoadingModule } from 'ngx-loading';
+import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCircle } from '@fortawesome/free-regular-svg-icons';
+import { TrelloService } from '../services/trello.service';
 
 @Component({
   selector: 'app-home',
@@ -9,20 +12,25 @@ import { ngxLoadingAnimationTypes, NgxLoadingModule } from 'ngx-loading';
   animations: [NgxLoadingModule.forRoot({})]
 })
 export class HomeComponent {
+  faShieldAlt = faShieldAlt;
+  faCircle = faCircle;
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
   public showBusy = false;
   public dashboardTitle: string;
   private fileToUpload: File = null;
   private http: HttpClient;
   private baseUrl: string;
+  private trelloService: TrelloService;
 
-  constructor(_http: HttpClient, @Inject('BASE_URL') _baseUrl: string) {
+  constructor(_http: HttpClient, @Inject('BASE_URL') _baseUrl: string, _trelloService: TrelloService) {
     this.http = _http;
     this.baseUrl = _baseUrl;
+    this.trelloService = _trelloService;
   }
 
-  public loadFile(inputFile) {
-    this.fileToUpload = inputFile[0];
+  public loadFile(fileInput) {
+    this.fileToUpload = fileInput.files[0];
+    document.getElementById(fileInput.id).nextElementSibling.innerHTML = this.fileToUpload.name;
   }
 
   public sendFile() {
@@ -73,5 +81,9 @@ export class HomeComponent {
     }
     
     reader.readAsText(selectedFile);
+  }
+
+  public solicitarAutorizacion(){
+    this.trelloService.obtenerAutorizacion();
   }
 }

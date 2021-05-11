@@ -3,27 +3,66 @@
     <div class="text-center mb-4">
       <h1 class="text-uppercase">Trello Discography</h1>
     </div>
-    <div class="col-md-4 m-auto p-3 bg-primary rounded box-shadow">
+    <div class="col-md-6 col-xl-4 m-auto p-3 bg-primary rounded box-shadow">
       <div class="lead text-light text-center">
-        <p>Complete el formulario para crear el tablero en Trello</p>
+        <p>Complete los siguientes pasos para usar la aplicación</p>
         <hr class="hr-filter">
       </div>
       <div class="p-3">
         <div class="form-group">
-          <label for="dashboardTitle">Nombre del artista:</label>
-          <input type="text" name="" id="dashboardTitle" class="form-control" [(ngModel)]="dashboardTitle" aria-describedby="helpId">
-          <small id="helpId" class="text-muted">** Este campo también definirá el nombre del tablero</small>
-        </div>
-        <div class="form-group">
-          <label for="">Importar discografía</label>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="customFile" (change)="loadFile($event.target.files)" lang="es">
-            <label class="custom-file-label" for="customFile" data-browse="Seleccionar">Seleccionar archivo</label>
+          <div class="d-flex align-items-center">
+            <fa-icon [icon]="faShieldAlt" size="3x"></fa-icon>
+            <div class="ml-3">
+              <button class="btn btn-success shadow" (click)="solicitarAutorizacion()" >Autorizar</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="text-center">
-        <button type="button" class="btn btn-light w-50 shadow" (click)="sendFile()">Crear Tablero</button>
+        <div class="form-group mt-5">
+          <div class="d-flex">
+            <div class="d-flex fa-3x">
+              <fa-layers>
+                <fa-icon [icon]="faCircle"></fa-icon>
+                <fa-layers-text title="1" [content]="'1'" transform="shrink-6 center" [styles]="{color: ''}"></fa-layers-text>
+              </fa-layers>
+            </div>
+            <div class="ml-3">
+              <label for="dashboardTitle">Titulo del tablero:</label>
+              <input type="text" name="" id="dashboardTitle" class="form-control" [(ngModel)]="dashboardTitle" aria-describedby="helpId">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="d-flex">
+            <div class="d-flex fa-3x">
+              <fa-layers>
+                <fa-icon [icon]="faCircle"></fa-icon>
+                <fa-layers-text title="2" [content]="'2'" transform="shrink-6 center" [styles]="{color: ''}"></fa-layers-text>
+              </fa-layers>
+            </div>
+            <div class="ml-3">
+              <label for="">Importar discografía</label>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="customFile" (change)="loadFile($event.target)" lang="es">
+                <label class="custom-file-label" for="customFile" data-browse="Seleccionar">Seleccionar archivo</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="d-flex">
+            <div class="d-flex align-self fa-3x">
+              <fa-layers>
+                <fa-icon [icon]="faCircle"></fa-icon>
+                <fa-layers-text title="3" [content]="'3'" transform="shrink-6 center" [styles]="{color: ''}"></fa-layers-text>
+              </fa-layers>
+            </div>
+            <div class="d-flex ml-3">
+              <div class="text-center">
+                <button type="button" class="btn btn-light shadow" (click)="sendFile()">Crear Tablero</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
