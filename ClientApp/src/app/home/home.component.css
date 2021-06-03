@@ -69,4 +69,38 @@
         right: 10%;
     }
 }
+.artist-image-wrapper{
+    /* width:125px; */
+    height:125px;
+}
+.artist-button:hover{
+    transform: scale(1.015);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+.albums-wrapper{
+    max-height: 400px;
+}
 
+/* SCROLL BAR Styles */
+/* width */
+.custom-scroll::-webkit-scrollbar,
+.albums-wrapper::-webkit-scrollbar {
+  width: 20px;
+}
+/* Track */
+.custom-scroll::-webkit-scrollbar-track,
+.albums-wrapper::-webkit-scrollbar-track{
+  box-shadow: inset 0 0 5px transparent; 
+  border-radius: 10px;
+} 
+/* Handle */
+.custom-scroll::-webkit-scrollbar-thumb,
+.albums-wrapper::-webkit-scrollbar-thumb {
+  background: #7b1fa2; 
+  border-radius: 10px;
+}
+/* Handle on hover */
+.custom-scroll::-webkit-scrollbar-thumb:hover,
+.albums-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #7b1fa2; 
+}

@@ -5,29 +5,25 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class TrelloService {
-  private http;
   private appKey;
   private appTitle;
+  private baseUrl;
 
-  constructor(_http: HttpClient) { 
-    this.http = _http;
+  constructor(private _http: HttpClient) {
     this.appKey = "fa469e740b7ec7fe2286bfefd1217e7a"
     this.appTitle = "TrelloTemplateCreatorApp"
   }
 
-  public obtenerAutorizacion(){
-
-    let url = "https://trello.com/1/authorize?expiration=1day&name=" + this.appTitle + "&scope=read&response_type=token&key=" + this.appKey;
-
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    this.http.get(url).subscribe(
-      result => {
-        console.log(result)
-        alert("Authorized");
-      }, 
-      error => {
-        console.error(error);
-      }
-    );
+  public obtenerEnlaceAutorizacion(): string {
+    return "https://trello.com/1/authorize?expiration=1day&name=" + this.appTitle + "&scope=read&response_type=token&key=" + this.appKey;
   }
+
+  public buscarArtistaPorNombre(artistName: string): any {
+    this._http.get(this.baseUrl + 'search?q=' + artistName + '&type=artist').subscribe(result => {
+      console.log("Job finished");
+    }, error => {
+      console.error(error)
+    });
+  }
+
 }

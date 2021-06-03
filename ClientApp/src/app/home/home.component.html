@@ -3,62 +3,96 @@
     <div class="text-center mb-4">
       <h1 class="text-uppercase">Trello Discography</h1>
     </div>
-    <div class="col-md-6 col-xl-4 m-auto p-3 bg-primary rounded box-shadow">
+    <div class="col-sm-10 col-md-8 col-lg-8 m-auto p-3 bg-warning rounded box-shadow">
       <div class="lead text-light text-center">
-        <p>Complete los siguientes pasos para usar la aplicación</p>
+        <p>Completa los siguientes pasos para crear la discografía de tu artista favorito en Trello</p>
         <hr class="hr-filter">
       </div>
-      <div class="p-3">
+      <div>
+        <mat-vertical-stepper class="bg-transparent" linear #stepper>
+          <mat-step [stepControl]="firstFormGroup">
+            <form [formGroup]="firstFormGroup">
+              <ng-template matStepLabel class="text-uppercase text-wrap">Selecciona a tu artista favorito</ng-template>
+              <div class="d-md-flex">
+                <mat-form-field appearance="fill" class="w-100 mr-3">
+                  <mat-label>Nombre del artista</mat-label>
+                  <input type="text" matInput name="" id="dashboardTitle" formControlName="dashboardTitle" [(ngModel)]="dashboardTitle" placeholder="Ej. Bob Dylan" >
+                </mat-form-field>
+                <div class="mat-form-field-wrapper d-flex justify-content-center">
+                  <button type="button" mat-raised-button color="primary" (click)="buscarArtista()">Buscar</button>
+                </div>
+              </div>             
+              <ng-container> 
+                <div class="col-md-12 mb-3 py-3 rounded overflow-auto custom-scroll" [hidden]="!artists">
+                  <div class="small lead text-light">*Artistas encontrados en Spotify</div>
+                  <div class="d-flex">
+                    <a type="button" *ngFor="let artist of artists" (click)="seleccionarArtista(artist)" class="text-reset text-decoration-none mx-3 artist-button" [ngClass]="{'shadow': isSelectedArtist(artist.id)}">
+                      <div class="d-inline-flex rounded-circle bg-light font-weight-bold shadow" style="position: absolute;">
+                        <mat-icon aria-hidden="false" aria-label="Example home icon" class="text-success" [hidden]="!isSelectedArtist(artist.id)">done</mat-icon>
+                      </div>
+                      <div class="p-2 align-items-center rounded">
+                        <img class="d-block artist-image-wrapper rounded" src="{{getArtistImageUrl(artist, 'md')}}">
+                          <div class="h6 m-0 pt-2 text-center">{{artist.name}}</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container> 
+                <div class="col-md-12 mb-3 py-3 rounded overflow-auto custom-scroll" [hidden]="!artistAlbums">
+                  <div class="small lead text-light">*Discografía del artista</div>
+                  <div class="d-inline-block text-center overflow-auto albums-wrapper">
+                    <a type="button" *ngFor="let album of artistAlbums" (click)="seleccionarArtista(album)" class="text-reset text-decoration-none artist-button mr-1" [ngClass]="{'shadow': isSelectedArtist(album.id)}">
+                      <div class="d-inline-flex rounded-circle bg-light font-weight-bold shadow" style="position: absolute;">
+                        <mat-icon aria-hidden="false" aria-label="Example home icon" class="text-success" [hidden]="!isSelectedArtist(album.id)">done</mat-icon>
+                      </div>
+                      <div class="rounded">
+                        <img class="d-block artist-image-wrapper rounded" src="{{getArtistImageUrl(album, 'md')}}" alt="{{album.name}}">
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </ng-container>
+              <button type="button" mat-raised-button matStepperNext color="primary" [hidden]="!artistAlbums">Siguiente</button>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="secondFormGroup">
+            <form [formGroup]="secondFormGroup">
+              <ng-template matStepLabel class="text-uppercase text-wrap">Autorizanos a crear el tablero en tu cuenta de Trello</ng-template>
+              <div class="d-flex align-items-center mt-3 ml-1">
+                <fa-icon [icon]="faShieldAlt" size="2x" [ngClass]="{'text-success': authorizationToken, 'text-danger': !authorizationToken}"></fa-icon>
+                <div class="ml-3">  
+                  <button mat-raised-button color="primary" (click)="solicitarAutorizacion()">Autorizar</button>
+                </div>
+              </div>
+              <div class="d-flex mt-3" *ngIf="showKeyInput">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Token de autorización</mat-label>
+                  <input type="text" matInput name="" id="authorizationToken" [(ngModel)]="authorizationToken" placeholder="Ej. QwRoiDF23pO4k11oLp12..." >
+                  <mat-icon matSuffix class="text-success" *ngIf="authorizationToken">sentiment_very_satisfied</mat-icon>
+                </mat-form-field>
+              </div>
+              <button type="button" mat-raised-button matStepperNext color="primary" [hidden]="!authorizationToken">Siguiente</button>
+            </form>  
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel class="text-uppercase text-wrap">Confirma la creación del tablero</ng-template>
+            <button mat-raised-button color="primary" (click)="sendFile()">Crear tablero</button>
+          </mat-step>
+        </mat-vertical-stepper>
+        <hr class="hr-filter">
         <div class="form-group">
-          <div class="d-flex align-items-center">
-            <fa-icon [icon]="faShieldAlt" size="3x"></fa-icon>
-            <div class="ml-3">
-              <button class="btn btn-success shadow" (click)="solicitarAutorizacion()" >Autorizar</button>
-            </div>
-          </div>
-        </div>
-        <div class="form-group mt-5">
           <div class="d-flex">
-            <div class="d-flex fa-3x">
-              <fa-layers>
-                <fa-icon [icon]="faCircle"></fa-icon>
-                <fa-layers-text title="1" [content]="'1'" transform="shrink-6 center" [styles]="{color: ''}"></fa-layers-text>
-              </fa-layers>
-            </div>
-            <div class="ml-3">
-              <label for="dashboardTitle">Titulo del tablero:</label>
-              <input type="text" name="" id="dashboardTitle" class="form-control" [(ngModel)]="dashboardTitle" aria-describedby="helpId">
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="d-flex">
-            <div class="d-flex fa-3x">
-              <fa-layers>
-                <fa-icon [icon]="faCircle"></fa-icon>
-                <fa-layers-text title="2" [content]="'2'" transform="shrink-6 center" [styles]="{color: ''}"></fa-layers-text>
-              </fa-layers>
+            <div class="d-flex">
+              <div class="d-flex align-items-center mat-form-field-wrapper">
+                <div class="rounded-circle p-2 px-3 border border-dark shadow">2</div>
+              </div>
             </div>
             <div class="ml-3">
               <label for="">Importar discografía</label>
               <div class="custom-file">
                 <input type="file" class="custom-file-input" id="customFile" (change)="loadFile($event.target)" lang="es">
                 <label class="custom-file-label" for="customFile" data-browse="Seleccionar">Seleccionar archivo</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="d-flex">
-            <div class="d-flex align-self fa-3x">
-              <fa-layers>
-                <fa-icon [icon]="faCircle"></fa-icon>
-                <fa-layers-text title="3" [content]="'3'" transform="shrink-6 center" [styles]="{color: ''}"></fa-layers-text>
-              </fa-layers>
-            </div>
-            <div class="d-flex ml-3">
-              <div class="text-center">
-                <button type="button" class="btn btn-light shadow" (click)="sendFile()">Crear Tablero</button>
               </div>
             </div>
           </div>
