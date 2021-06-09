@@ -87,5 +87,21 @@ namespace TrelloTemplateCreator.Controllers
                 throw Ex;
             }
         }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult> Auth()
+        {
+            try
+            {
+                string spotifyToken = ss.Auth();
+
+                return Ok(spotifyToken);
+            }
+            catch (Exception Ex)
+            {
+                throw Ex;
+            }
+        }
     }
 }

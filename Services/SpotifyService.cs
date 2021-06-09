@@ -20,7 +20,7 @@ namespace TrelloTemplateCreator.Services.Interfaces
             Authorize();
         }
 
-        private void Authorize()
+        private string Authorize()
         {
             using (var httpClient = new HttpClient())
             {
@@ -38,10 +38,16 @@ namespace TrelloTemplateCreator.Services.Interfaces
                     SpotifyAuth authResult = JsonConvert.DeserializeObject<SpotifyAuth>(resultString);
                     spotifyToken = authResult.Access_token;
                     spotifyTokenType = authResult.Token_type;
+                    return authResult.Access_token;
                 }
             }
+            return null;
         }
 
+        public string Auth()
+        {
+            return Authorize();
+        }
         public SpotifyAlbumSearch searchAlbumsByTitle(string query)
         {
             using (var httpClient = new HttpClient())
