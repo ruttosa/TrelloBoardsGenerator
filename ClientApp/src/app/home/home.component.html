@@ -68,7 +68,7 @@
               <div class="d-flex mt-3" *ngIf="showKeyInput">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Token de autorización</mat-label>
-                  <input type="text" matInput name="" id="authorizationToken" [(ngModel)]="authorizationToken" placeholder="Ej. QwRoiDF23pO4k11oLp12..." >
+                  <input type="text" matInput name="" id="authorizationToken" formControlName="authorizationToken" [(ngModel)]="authorizationToken" placeholder="Ej. QwRoiDF23pO4k11oLp12..." >
                   <mat-icon matSuffix class="text-success" *ngIf="authorizationToken">sentiment_very_satisfied</mat-icon>
                 </mat-form-field>
               </div>
@@ -77,11 +77,14 @@
           </mat-step>
           <mat-step>
             <ng-template matStepLabel class="text-uppercase text-wrap">Confirma la creación del tablero</ng-template>
-            <button mat-raised-button color="primary" (click)="sendFile()">Crear tablero</button>
+            <button mat-raised-button color="primary" (click)="crearTablero()">Crear tablero</button>
           </mat-step>
         </mat-vertical-stepper>
         <hr class="hr-filter">
-        <div class="form-group">
+        <div class="form-group p-3 rounded bg-dark text-light small overflow-auto" style="font-family: monospace; max-height: 350px;" [hidden]="processMessages < 1">
+          <div class="div" *ngFor="let message of processMessages">{{message}}</div>
+        </div>
+        <!-- <div class="form-group">
           <div class="d-flex">
             <div class="d-flex">
               <div class="d-flex align-items-center mat-form-field-wrapper">
@@ -96,7 +99,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

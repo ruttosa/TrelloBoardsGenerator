@@ -14,6 +14,7 @@ export class SpotifyService {
 
   constructor(private _http: HttpClient) { 
     this.authorize();
+    //this.auth();
   }
 
   public searchArtist(artistName: string): Promise<Artista[]>{
@@ -47,6 +48,15 @@ export class SpotifyService {
       console.log(err);
       return null;
     })
+  }
+
+  private auth(){    
+    this._http.get("http://localhost:5000/Discography").subscribe(result => {
+      this.spotifyToken = result as string;
+      this.spotifyTokenType = "Bearer";
+    }, error => {
+      console.error(error)
+    });
   }
 
   private authorize(){

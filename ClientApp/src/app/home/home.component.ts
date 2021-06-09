@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { SpotifyService } from '../services/spotify.service';
 import { Album, Artista } from '../services/spotify';
+import { error } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +36,7 @@ export class HomeComponent {
   public authorizationToken: string;
   public artistSelected: Artista;
   public artistAlbums: Album[];
+  public processMessages: string[] = [];
 
   constructor(private _http: HttpClient,
               private _trelloService: TrelloService,
@@ -51,7 +53,7 @@ export class HomeComponent {
       dashboardTitle: ['', Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
+      authorizationToken: ['', Validators.required]
     });
   }
 
@@ -70,7 +72,8 @@ export class HomeComponent {
       console.log(reader.result);
       const data = {
         dashboardTitle: self.dashboardTitle,
-        file: reader.result
+        artist:self.artistSelected,
+        albums:self.artistAlbums
       }
       const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
       self._http.post(self.baseUrl + 'discography', data, { headers }).subscribe(result => {
@@ -178,5 +181,67 @@ export class HomeComponent {
     this._spotifyService.getAlbumsByArtistId(artist.id).then(albums => {
       this.artistAlbums = albums;
     });
+  }
+
+  public group(){
+    var albumsByDecade = this.groupBy(this.artistAlbums, 'release_date');
+    var t = albumsByDecade;
+  }
+
+  public getDecadesFromYear(year: number): any {
+    if (Number.isNaN(year) || (year.toString().length < 4) || (year.toString().length > 4)) {
+        throw new Error('Date must be valid and have a 4-digit year attribute');
+    }
+    let start       = Number(`${year.toString()[2]}0`);
+    let startIdx    = year.toString().substring(0, 2);
+    let end         = 0;
+    start           = (start === 0) ? Number(`${startIdx}00`) : Number(`${startIdx}${start}`);
+    end             = start + 10;
+    return { start: start, end: end };
+  }
+  
+  public groupBy(xs, key){
+    var _self = this;
+      return xs.reduce(function(rv, x) {
+        var decade =  _self.getDecadesFromYear(new Date(x[key]).getFullYear());
+        (rv[decade.start] = rv[decade.start] || []).push(x);
+        return rv;
+      }, {});
+  }
+
+  public crearTablero(){
+
+    // Crear Tablero en Trello con el nombre del artista
+    this._trelloService.crearTablero(this.artistSelected.name, this.authorizationToken).then(tablero =>{
+
+      var tableroId = tablero.id;
+      this.processMessages.push("Tablero creado. Nombre del tablero: " + tablero.name);
+      var albumsByDecade = this.groupBy(this.artistAlbums, 'release_date');
+      Object.entries(albumsByDecade).forEach(decade => {
+        var decTitle = decade[0] as string;
+        var decAlbums = decade[1] as Array<any>;
+
+        // Crear listas de décadas en tablero de Trello
+        this._trelloService.crearLista(decTitle, tableroId, this.authorizationToken).then(lista =>{
+          this.processMessages.push("Lista creada. Título de la lista: " + lista.name);
+          decAlbums.forEach(album => {  
+            // Crear tarjeta para cada albums
+            this._trelloService.CrearTarjeta(album.name, lista.id, this.authorizationToken).then(tarjeta => {
+              this.processMessages.push("Tarjeta creada. Album: " + tarjeta.name);
+              var t = tarjeta;
+            });
+          });
+        }, error => {
+          throw error;
+        });       
+      });
+
+    },error => {
+      alert(error.status + ' ' + error.statusText + ' - ' + error.error.message);
+    });
+
+    
+
+
   }
 }
