@@ -37,5 +37,5 @@ steps:
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'PublishProfile'
-    PublishProfilePath: '$(System.DefaultWorkingDirectory)/**/TrelloTemplateCreator01 - Web Deploy.pubxml'
+    PublishProfilePath: '$(System.DefaultWorkingDirectory)/**/TrelloTemplateCreator - Web Deploy.pubxml'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
